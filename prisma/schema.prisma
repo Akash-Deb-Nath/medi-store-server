@@ -16,6 +16,7 @@ datasource db {
 model Medicines {
   id            String     @id @default(uuid())
   name          String     @db.VarChar(255)
+  manufacturer  String
   price         Int
   stockQuantity Int
   imageUrl      String?
@@ -28,6 +29,7 @@ model Medicines {
 
   orderItems OrderItem[]
   reviews    Reviews[]
+  cartItems  CartItem[]
 
   @@index([sellerId, categoryId])
 }
@@ -39,6 +41,26 @@ model Categories {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   medicines Medicines[]
+}
+
+model Cart {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  items CartItem[]
+}
+
+model CartItem {
+  id         String    @id @default(uuid())
+  cartId     String
+  cart       Cart      @relation(fields: [cartId], references: [id])
+  medicineId String
+  medicine   Medicines @relation(fields: [medicineId], references: [id])
+  quantity   Int
+  price      Int
 }
 
 model Orders {
@@ -101,7 +123,7 @@ model User {
   seller        Seller?
   customer      Customer?
 
-  role String? @default("customer")
+  role   String? @default("customer")
   status String? @default("active")
 
   @@unique([email])
@@ -135,6 +157,7 @@ model Customer {
 
   orders  Orders[]
   reviews Reviews[]
+  carts   Cart[]
 }
 
 model Session {
