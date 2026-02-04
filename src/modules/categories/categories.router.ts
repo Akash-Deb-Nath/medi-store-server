@@ -11,4 +11,4 @@ router.post(
 );
 router.get("/", CategoriesController.getCategories);
 
-export const categoriesRoute: Router = router;
+export const categoriesRouter: Router = router;

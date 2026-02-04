@@ -45,8 +45,9 @@ model Categories {
 
 model Cart {
   id         String   @id @default(uuid())
-  customerId String
+  customerId String   @unique
   customer   Customer @relation(fields: [customerId], references: [id])
+  totalPrice Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -61,6 +62,8 @@ model CartItem {
   medicine   Medicines @relation(fields: [medicineId], references: [id])
   quantity   Int
   price      Int
+
+  @@unique([cartId, medicineId])
 }
 
 model Orders {
@@ -123,7 +126,7 @@ model User {
   seller        Seller?
   customer      Customer?
 
-  role   String? @default("customer")
+  role   String? @default("CUSTOMER")
   status String? @default("active")
 
   @@unique([email])
