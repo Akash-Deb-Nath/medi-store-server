@@ -1,9 +1,42 @@
 import { Request, Response } from "express";
+import { reviewsService } from "./reviews.service";
 
 const createReviews = async (req: Request, res: Response) => {
-    const sellerId=req.user?.id;
-  const { medicineId } = req.params;
-  const data=req.body;
+  try {
+    const { medicineId } = req.params;
+    const data = req.body;
+    const customerId = req.user?.id;
+    if (!customerId) {
+      throw new Error("You are unauthorized");
+    }
+    const result = await reviewsService.createReviews(
+      data,
+      medicineId as string,
+      customerId as string,
+    );
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Failed to create reviews",
+      details: error,
+    });
+  }
+};
 
-  const result=await
+const getReviews = async (req: Request, res: Response) => {
+  try {
+    const { medicineId } = req.params;
+    const result = await reviewsService.getReviews(medicineId as string);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Failed to get reviews",
+      details: error,
+    });
+  }
+};
+
+export const reviewsController = {
+  createReviews,
+  getReviews,
 };

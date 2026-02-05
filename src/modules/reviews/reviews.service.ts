@@ -15,3 +15,16 @@ const createReviews = async (
   });
   return result;
 };
+const getReviews = async (medicineId: string) => {
+  const result = await prisma.reviews.findUnique({
+    where: {
+      id: medicineId,
+    },
+  });
+  return result;
+};
+
+export const reviewsService = {
+  createReviews,
+  getReviews,
+};
