@@ -35,6 +35,8 @@ const createSeller = async (
         userId,
       },
     });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    console.log(user);
 
     await tx.user.update({
       where: { id: userId },
@@ -47,7 +49,41 @@ const createSeller = async (
   return result;
 };
 
+const getAllUsers = async () => {
+  const users = await prisma.user.findMany({
+    include: {
+      customer: true,
+      seller: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  return users;
+};
+
+const getUserById = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      customer: true,
+      seller: true,
+    },
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return user;
+};
+
+const updateUserStatus = async (userId: string, status: string) => {
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { status },
+  });
+  return updatedUser;
+};
+
 export const UserServices = {
   createCustomer,
   createSeller,
+  getAllUsers,
 };

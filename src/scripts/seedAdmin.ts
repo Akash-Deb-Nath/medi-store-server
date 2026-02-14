@@ -5,8 +5,8 @@ async function seedAdmin() {
   try {
     // check user exist in db or not
     const adminData = {
-      name: "Admin3",
-      email: "admin3@admin.com",
+      name: "Admin",
+      email: "admin@admin.com",
       role: UserRole.ADMIN,
       password: "Admin12345",
     };

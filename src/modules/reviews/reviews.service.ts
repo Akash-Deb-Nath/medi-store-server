@@ -15,11 +15,10 @@ const createReviews = async (
   });
   return result;
 };
+
 const getReviews = async (medicineId: string) => {
-  const result = await prisma.reviews.findUnique({
-    where: {
-      id: medicineId,
-    },
+  const result = await prisma.reviews.findMany({
+    where: { medicineId },
   });
   return result;
 };

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { MedicinesServices } from "./medicines.service";
+import { UserRole } from "../../middlewares/authMiddleware";
 
 const postMedicines = async (req: Request, res: Response) => {
   try {
@@ -61,6 +62,24 @@ const getMedicineById = async (req: Request, res: Response) => {
     });
   }
 };
+const getMedicineBySeller = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    if (!user || user.role !== UserRole.SELLER) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const result = await MedicinesServices.getMedicineById(user.id as string);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Medicine retrieve failed",
+      details: error,
+    });
+  }
+};
 
 const updateMedicines = async (req: Request, res: Response) => {
   try {
@@ -111,5 +130,6 @@ export const MedicinesController = {
   updateMedicines,
   getMedicines,
   getMedicineById,
+  getMedicineBySeller,
   deleteMedicine,
 };

@@ -11,7 +11,7 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: "string",
-        defaultValue: "customer",
+        defaultValue: "CUSTOMER",
         required: false,
       },
       status: {
@@ -23,7 +23,7 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
-    autoSignIn: false,
+    autoSignIn: true,
   },
   socialProviders: {
     google: {

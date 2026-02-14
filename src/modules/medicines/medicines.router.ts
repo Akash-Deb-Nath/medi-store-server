@@ -6,6 +6,11 @@ const router = express.Router();
 
 router.get("/", MedicinesController.getMedicines);
 router.get("/:medicineId", MedicinesController.getMedicineById);
+router.get(
+  "/seller",
+  authMiddleware(UserRole.SELLER),
+  MedicinesController.getMedicineById,
+);
 router.post(
   "/",
   authMiddleware(UserRole.SELLER),

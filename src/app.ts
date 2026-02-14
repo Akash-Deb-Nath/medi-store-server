@@ -6,6 +6,8 @@ import cors from "cors";
 import { categoriesRouter } from "./modules/categories/categories.router";
 import { userRouter } from "./modules/user/user.router";
 import { cartRouter } from "./modules/cart/cart.router";
+import { ordersRouter } from "./modules/orders/orders.router";
+import { reviewsRouter } from "./modules/reviews/reviews.router";
 
 const app: Application = express();
 
@@ -20,10 +22,12 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json());
 
-app.use("/medicines", medicinesRouter);
-app.use("/categories", categoriesRouter);
-app.use("/profile", userRouter);
-app.use("/cart", cartRouter);
+app.use("/api/categories", categoriesRouter);
+app.use("/api/medicines", medicinesRouter);
+app.use("/api/user", userRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/order", ordersRouter);
+app.use("/api/reviews", reviewsRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World");

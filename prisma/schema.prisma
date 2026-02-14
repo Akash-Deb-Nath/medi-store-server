@@ -139,6 +139,7 @@ model Seller {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   pharmacyName  String
   licenseNumber String
+  role          String
   phoneNumber   String?
   dateOfBirth   DateTime?
   gender        String?

@@ -6,10 +6,17 @@ const postMedicines = async (
   data: Omit<Medicines, "id" | "createdAt" | "updatedAt" | "sellerId">,
   userId: string,
 ) => {
+  const seller = await prisma.seller.findUnique({
+    where: { userId },
+  });
+  if (!seller) {
+    throw new Error("Seller not found");
+  }
+
   const result = await prisma.medicines.create({
     data: {
       ...data,
-      sellerId: userId,
+      sellerId: seller?.id as string,
     },
   });
   return result;
@@ -75,6 +82,15 @@ const getMedicineById = async (medicineId: string) => {
   return result;
 };
 
+const getMedicineBySeller = async (sellerId: string) => {
+  const result = await prisma.medicines.findMany({
+    where: {
+      sellerId,
+    },
+  });
+  return result;
+};
+
 const updateMedicines = async (
   data: Omit<Medicines, "id" | "createdAt" | "updatedAt" | "sellerId">,
   medicineId: string,
@@ -113,5 +129,6 @@ export const MedicinesServices = {
   updateMedicines,
   getMedicines,
   getMedicineById,
+  getMedicineBySeller,
   deleteMedicine,
 };

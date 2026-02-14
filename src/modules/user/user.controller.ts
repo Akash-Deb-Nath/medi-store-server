@@ -6,6 +6,8 @@ const createCustomerOrSeller = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     const data = req.body;
+    console.log(user);
+    console.log(data);
 
     if (!user?.id) {
       return res.status(401).json({
@@ -24,10 +26,10 @@ const createCustomerOrSeller = async (req: Request, res: Response) => {
 
     let result;
 
-    if (data.role === UserRole.CUSTOMER) {
-      result = await UserServices.createCustomer(data, user.id);
-    } else {
+    if (data.role === UserRole.SELLER) {
       result = await UserServices.createSeller(data, user.id);
+    } else {
+      result = await UserServices.createCustomer(data, user.id);
     }
 
     // Success response - Frontend hard reload korbe
@@ -50,6 +52,19 @@ const createCustomerOrSeller = async (req: Request, res: Response) => {
   }
 };
 
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const result = await UserServices.getAllUsers();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Users retrieve failed",
+      details: error,
+    });
+  }
+};
+
 export const UserController = {
   createCustomerOrSeller,
+  getAllUsers,
 };
