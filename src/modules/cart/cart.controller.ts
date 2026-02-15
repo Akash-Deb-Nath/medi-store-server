@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { prisma } from "../../lib/prisma";
 import { CartService } from "./cart.service";
 
 const addToCart = async (req: Request, res: Response) => {
@@ -12,6 +11,7 @@ const addToCart = async (req: Request, res: Response) => {
     }
 
     const result = await CartService.addToCart(data, customerId as string);
+    console.log(result);
 
     res.status(201).json(result);
   } catch (error) {

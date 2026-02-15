@@ -11,7 +11,7 @@ router.post(
 );
 
 router.get(
-  "/users",
+  "/allUsers",
   authMiddleware(UserRole.ADMIN),
   UserController.getAllUsers,
 );

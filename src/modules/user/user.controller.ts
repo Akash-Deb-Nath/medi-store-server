@@ -32,12 +32,10 @@ const createCustomerOrSeller = async (req: Request, res: Response) => {
       result = await UserServices.createCustomer(data, user.id);
     }
 
-    // Success response - Frontend hard reload korbe
     return res.status(201).json({
       success: true,
       message: `${data.role} profile created successfully`,
       data: result,
-      // Optional: Suggest redirect path
       redirectTo:
         data.role === UserRole.SELLER
           ? "/seller/dashboard"

@@ -46,7 +46,6 @@ const authMiddleware = (...roles: UserRole[]) => {
             "Forbidden! You don't have permission to access this resources",
         });
       }
-      console.log("ki obostha");
       next();
     } catch (error) {
       next(error);

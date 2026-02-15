@@ -12,11 +12,17 @@ const addToCart = async (
     throw new Error("Invalid medicine");
   }
 
+  const customer = await prisma.customer.findUnique({
+    where: { id: customerId },
+  });
+  console.log("Customer found:", customer);
+
   let cart = await prisma.cart.upsert({
     where: { customerId },
     update: {},
     create: { customerId, totalPrice: 0 },
   });
+  console.log("Cart upsert result:", cart);
 
   const item = await prisma.cartItem.upsert({
     where: {
