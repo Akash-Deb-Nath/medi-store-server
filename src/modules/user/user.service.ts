@@ -13,8 +13,6 @@ const createCustomer = async (
       },
     });
 
-    console.log(customer);
-
     await tx.user.update({
       where: { id: userId },
       data: { role: "CUSTOMER" },

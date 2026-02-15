@@ -11,18 +11,16 @@ const addToCart = async (
   if (!medicine) {
     throw new Error("Invalid medicine");
   }
-
   const customer = await prisma.customer.findUnique({
-    where: { id: customerId },
+    where: { userId: customerId },
   });
   console.log("Customer found:", customer);
 
   let cart = await prisma.cart.upsert({
-    where: { customerId },
+    where: { customerId: customer?.id as string },
     update: {},
-    create: { customerId, totalPrice: 0 },
+    create: { customerId: customer?.id as string, totalPrice: 0 },
   });
-  console.log("Cart upsert result:", cart);
 
   const item = await prisma.cartItem.upsert({
     where: {
@@ -51,9 +49,13 @@ const addToCart = async (
 
   return item;
 };
-const getCart = async (customerId: string) => {
+const getCart = async (userId: string) => {
+  const customer = await prisma.customer.findUnique({
+    where: { userId },
+  });
+  if (!customer) throw new Error("Customer not found");
   const result = await prisma.cart.findUnique({
-    where: { customerId },
+    where: { customerId: customer.id },
     include: { items: { include: { medicine: true } } },
   });
   return result;

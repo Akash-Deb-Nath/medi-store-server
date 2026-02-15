@@ -1,12 +1,24 @@
 import express, { Router } from "express";
 import { CartController } from "./cart.controller";
-import authMiddleware from "../../middlewares/authMiddleware";
+import authMiddleware, { UserRole } from "../../middlewares/authMiddleware";
 
 const router = express.Router();
 
-router.post("/add", authMiddleware(), CartController.addToCart);
-router.get("/", CartController.getCart);
-router.put("/items/:itemId", CartController.updateCartItem);
-router.delete("/items/:itemId", CartController.updateCartItem);
+router.post(
+  "/add",
+  authMiddleware(UserRole.CUSTOMER),
+  CartController.addToCart,
+);
+router.get("/", authMiddleware(UserRole.CUSTOMER), CartController.getCart);
+router.put(
+  "/items/:itemId",
+  authMiddleware(UserRole.CUSTOMER),
+  CartController.updateCartItem,
+);
+router.delete(
+  "/items/:itemId",
+  authMiddleware(UserRole.CUSTOMER),
+  CartController.updateCartItem,
+);
 
 export const cartRouter: Router = router;

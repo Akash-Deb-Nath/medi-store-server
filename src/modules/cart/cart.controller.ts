@@ -24,11 +24,11 @@ const addToCart = async (req: Request, res: Response) => {
 
 const getCart = async (req: Request, res: Response) => {
   try {
-    const customerId = req.user?.id;
-    if (!customerId) {
+    const userId = req.user?.id;
+    if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }
-    const result = await CartService.getCart(customerId as string);
+    const result = await CartService.getCart(userId as string);
 
     res.status(201).json(result);
   } catch (error) {

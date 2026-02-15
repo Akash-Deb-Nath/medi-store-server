@@ -6,8 +6,6 @@ const createCustomerOrSeller = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     const data = req.body;
-    console.log(user);
-    console.log(data);
 
     if (!user?.id) {
       return res.status(401).json({
