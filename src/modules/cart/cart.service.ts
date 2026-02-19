@@ -19,7 +19,11 @@ const addToCart = async (
   let cart = await prisma.cart.upsert({
     where: { customerId: customer?.id as string },
     update: {},
-    create: { customerId: customer?.id as string, totalPrice: 0 },
+    create: {
+      customerId: customer?.id as string,
+      totalPrice: 0,
+      shippingAddress: customer?.address as string,
+    },
   });
 
   const item = await prisma.cartItem.upsert({
