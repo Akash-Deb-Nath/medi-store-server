@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { orderService } from "./orders.service";
 import { UserRole } from "../../middlewares/authMiddleware";
 
-const checkout = async (req: Request, res: Response) => { 
+const checkout = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     console.log(userId);
@@ -63,18 +63,14 @@ const getOrders = async (req: Request, res: Response) => {
     if (!userId || !role) {
       throw new Error("Unauthorized");
     }
-
     let result;
     if (role === UserRole.SELLER) {
-      console.log("seller");
       result = await orderService.getSellerOrders(userId);
     } else if (role === UserRole.CUSTOMER) {
       result = await orderService.getCustomerOrders(userId);
     } else {
       throw new Error("Not allowed");
     }
-
-    console.log(result);
 
     res.status(200).json(result);
   } catch (error) {

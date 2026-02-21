@@ -35,8 +35,6 @@ const createSeller = async (
         userId,
       },
     });
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    console.log(user);
 
     await tx.user.update({
       where: { id: userId },
