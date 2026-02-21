@@ -62,6 +62,7 @@ const getMedicineById = async (req: Request, res: Response) => {
     });
   }
 };
+
 const getMedicineBySeller = async (req: Request, res: Response) => {
   try {
     const user = req.user;

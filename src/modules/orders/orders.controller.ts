@@ -2,13 +2,14 @@ import { Request, Response } from "express";
 import { orderService } from "./orders.service";
 import { UserRole } from "../../middlewares/authMiddleware";
 
-const checkout = async (req: Request, res: Response) => {
+const checkout = async (req: Request, res: Response) => { 
   try {
-    const customerId = req.user?.id;
-    if (!customerId) {
+    const userId = req.user?.id;
+    console.log(userId);
+    if (!userId) {
       throw new Error("Unauthorized");
     }
-    const result = await orderService.checkout(customerId);
+    const result = await orderService.checkout(userId);
     res.status(201).json(result);
   } catch (error) {
     res.status(400).json({
@@ -42,6 +43,18 @@ const updateOrderStatus = async (req: Request, res: Response) => {
   }
 };
 
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const result = await orderService.getAllOrders();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Failed to get orders",
+      details: error,
+    });
+  }
+};
+
 const getOrders = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
@@ -53,12 +66,15 @@ const getOrders = async (req: Request, res: Response) => {
 
     let result;
     if (role === UserRole.SELLER) {
+      console.log("seller");
       result = await orderService.getSellerOrders(userId);
     } else if (role === UserRole.CUSTOMER) {
       result = await orderService.getCustomerOrders(userId);
     } else {
       throw new Error("Not allowed");
     }
+
+    console.log(result);
 
     res.status(200).json(result);
   } catch (error) {
@@ -92,6 +108,7 @@ const getOrderDetails = async (req: Request, res: Response) => {
 export const ordersController = {
   checkout,
   updateOrderStatus,
+  getAllOrders,
   getOrders,
   getOrderDetails,
 };

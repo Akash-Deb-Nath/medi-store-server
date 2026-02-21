@@ -18,7 +18,7 @@ router.put(
 router.delete(
   "/items/:itemId",
   authMiddleware(UserRole.CUSTOMER),
-  CartController.updateCartItem,
+  CartController.deleteCartItem,
 );
 
 export const cartRouter: Router = router;

@@ -9,7 +9,7 @@ router.get("/:medicineId", MedicinesController.getMedicineById);
 router.get(
   "/seller",
   authMiddleware(UserRole.SELLER),
-  MedicinesController.getMedicineById,
+  MedicinesController.getMedicineBySeller,
 );
 router.post(
   "/",

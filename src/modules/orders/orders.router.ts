@@ -10,6 +10,11 @@ router.post(
   ordersController.checkout,
 );
 router.get(
+  "/allOrders",
+  authMiddleware(UserRole.ADMIN),
+  ordersController.getOrders,
+);
+router.get(
   "/",
   authMiddleware(UserRole.SELLER, UserRole.CUSTOMER),
   ordersController.getOrders,

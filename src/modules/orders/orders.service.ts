@@ -1,9 +1,15 @@
 import { OrderStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
-const checkout = async (customerId: string) => {
+const checkout = async (userId: string) => {
+  const customer = await prisma.customer.findUnique({
+    where: { userId },
+  });
+  if (!customer) {
+    throw new Error("User not found");
+  }
   const cart = await prisma.cart.findUnique({
-    where: { customerId },
+    where: { customerId: customer.id as string },
     include: { items: true },
   });
 
@@ -18,7 +24,7 @@ const checkout = async (customerId: string) => {
 
   const order = await prisma.orders.create({
     data: {
-      customerId,
+      customerId: customer.id as string,
       totalPrice,
       status: "PENDING",
       items: {
@@ -47,6 +53,7 @@ const checkout = async (customerId: string) => {
 
   return order;
 };
+
 const updateOrderStatus = async (
   orderId: string,
   sellerId: string,
@@ -82,13 +89,24 @@ const updateOrderStatus = async (
   return updatedOrder;
 };
 
-const getSellerOrders = async (sellerId: string) => {
+const getAllOrders = async () => {
+  const orders = await prisma.orders.findMany();
+  return orders;
+};
+
+const getSellerOrders = async (userId: string) => {
+  const seller = await prisma.seller.findUnique({
+    where: { userId },
+  });
+  if (!seller) {
+    throw new Error("User not found");
+  }
   const orders = await prisma.orders.findMany({
     where: {
       items: {
         some: {
           medicine: {
-            sellerId,
+            sellerId: seller.id as string,
           },
         },
       },
@@ -105,9 +123,15 @@ const getSellerOrders = async (sellerId: string) => {
   return orders;
 };
 
-const getCustomerOrders = async (customerId: string) => {
+const getCustomerOrders = async (userId: string) => {
+  const customer = await prisma.customer.findUnique({
+    where: { userId },
+  });
+  if (!customer) {
+    throw new Error("User not found");
+  }
   const orders = await prisma.orders.findMany({
-    where: { customerId },
+    where: { customerId: customer.id as string },
     include: {
       items: {
         include: { medicine: true },
@@ -141,6 +165,7 @@ const getOrderDetails = async (orderId: string, customerId: string) => {
 export const orderService = {
   checkout,
   updateOrderStatus,
+  getAllOrders,
   getSellerOrders,
   getCustomerOrders,
   getOrderDetails,
