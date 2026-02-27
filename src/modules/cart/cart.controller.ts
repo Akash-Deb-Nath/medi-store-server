@@ -3,14 +3,15 @@ import { CartService } from "./cart.service";
 
 const addToCart = async (req: Request, res: Response) => {
   try {
-    const customerId = req.user?.id;
+    const userId = req.user?.id;
     const data = req.body;
+    console.log(userId);
 
-    if (!customerId) {
+    if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const result = await CartService.addToCart(data, customerId as string);
+    const result = await CartService.addToCart(data, userId as string);
     console.log(result);
 
     res.status(201).json(result);

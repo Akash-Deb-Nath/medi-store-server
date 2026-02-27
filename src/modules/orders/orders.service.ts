@@ -143,11 +143,17 @@ const getCustomerOrders = async (userId: string) => {
   return orders;
 };
 
-const getOrderDetails = async (orderId: string, customerId: string) => {
+const getOrderDetails = async (orderId: string, userId: string) => {
+  const customer = await prisma.customer.findUnique({
+    where: { userId },
+  });
+  if (!customer) {
+    throw new Error("User not found");
+  }
   const order = await prisma.orders.findFirst({
     where: {
       id: orderId,
-      customerId,
+      customerId: customer.id as string,
     },
     include: {
       items: {

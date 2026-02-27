@@ -12,7 +12,7 @@ router.post(
 router.get(
   "/allOrders",
   authMiddleware(UserRole.ADMIN),
-  ordersController.getOrders,
+  ordersController.getAllOrders,
 );
 router.get(
   "/",

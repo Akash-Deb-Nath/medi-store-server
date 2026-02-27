@@ -3,7 +3,7 @@ import { prisma } from "../../lib/prisma";
 
 const addToCart = async (
   data: Omit<CartItem, "id" | "createdAt" | "updatedAt">,
-  customerId: string,
+  userId: string,
 ) => {
   const medicine = await prisma.medicines.findUnique({
     where: { id: data.medicineId },
@@ -12,7 +12,7 @@ const addToCart = async (
     throw new Error("Invalid medicine");
   }
   const customer = await prisma.customer.findUnique({
-    where: { userId: customerId },
+    where: { userId },
   });
   console.log("Customer found:", customer);
 

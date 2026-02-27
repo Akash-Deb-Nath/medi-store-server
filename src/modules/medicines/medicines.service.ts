@@ -82,10 +82,17 @@ const getMedicineById = async (medicineId: string) => {
   return result;
 };
 
-const getMedicineBySeller = async (sellerId: string) => {
+const getMedicineBySeller = async (userId: string) => {
+  const seller = await prisma.seller.findUnique({
+    where: { userId },
+  });
+  console.log(seller);
+  if (!seller) {
+    throw new Error("Seller not found");
+  }
   const result = await prisma.medicines.findMany({
     where: {
-      sellerId,
+      sellerId: seller.id as string,
     },
   });
   return result;
