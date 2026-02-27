@@ -5,14 +5,14 @@ const createReviews = async (req: Request, res: Response) => {
   try {
     const { medicineId } = req.params;
     const data = req.body;
-    const customerId = req.user?.id;
-    if (!customerId) {
+    const userId = req.user?.id;
+    if (!userId) {
       throw new Error("You are unauthorized");
     }
     const result = await reviewsService.createReviews(
       data,
       medicineId as string,
-      customerId as string,
+      userId as string,
     );
     res.status(201).json(result);
   } catch (error) {
@@ -27,6 +27,7 @@ const getReviews = async (req: Request, res: Response) => {
   try {
     const { medicineId } = req.params;
     const result = await reviewsService.getReviews(medicineId as string);
+    console.log(result);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({
