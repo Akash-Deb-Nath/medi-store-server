@@ -39,7 +39,6 @@ async function seedAdmin() {
         },
       });
     }
-    console.log(signupAdmin);
   } catch (error) {
     console.log(error);
   }

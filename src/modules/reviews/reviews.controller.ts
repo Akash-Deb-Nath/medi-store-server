@@ -27,7 +27,6 @@ const getReviews = async (req: Request, res: Response) => {
   try {
     const { medicineId } = req.params;
     const result = await reviewsService.getReviews(medicineId as string);
-    console.log(result);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({

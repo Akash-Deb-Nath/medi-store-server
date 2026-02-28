@@ -40,7 +40,6 @@ const createCustomerOrSeller = async (req: Request, res: Response) => {
           : "/customer/dashboard",
     });
   } catch (error: any) {
-    console.error("Create profile error:", error);
     return res.status(400).json({
       success: false,
       message: error.message || "Failed to create customer or seller",

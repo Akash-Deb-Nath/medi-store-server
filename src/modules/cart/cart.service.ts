@@ -14,7 +14,6 @@ const addToCart = async (
   const customer = await prisma.customer.findUnique({
     where: { userId },
   });
-  console.log("Customer found:", customer);
 
   let cart = await prisma.cart.upsert({
     where: { customerId: customer?.id as string },

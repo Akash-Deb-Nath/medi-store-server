@@ -5,14 +5,12 @@ const addToCart = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const data = req.body;
-    console.log(userId);
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
     const result = await CartService.addToCart(data, userId as string);
-    console.log(result);
 
     res.status(201).json(result);
   } catch (error) {

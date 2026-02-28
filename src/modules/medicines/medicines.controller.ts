@@ -66,8 +66,6 @@ const getMedicineById = async (req: Request, res: Response) => {
 const getMedicineBySeller = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    console.log("ROUTE HIT");
-    console.log("user:", req.user);
     if (!user || user.role !== UserRole.SELLER) {
       return res.status(401).json({ error: "Unauthorized" });
     }

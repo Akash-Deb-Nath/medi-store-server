@@ -86,7 +86,6 @@ const getMedicineBySeller = async (userId: string) => {
   const seller = await prisma.seller.findUnique({
     where: { userId },
   });
-  console.log(seller);
   if (!seller) {
     throw new Error("Seller not found");
   }

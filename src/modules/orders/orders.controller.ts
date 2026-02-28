@@ -5,7 +5,6 @@ import { UserRole } from "../../middlewares/authMiddleware";
 const checkout = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    console.log(userId);
     if (!userId) {
       throw new Error("Unauthorized");
     }

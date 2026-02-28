@@ -98,7 +98,6 @@ const getSellerOrders = async (userId: string) => {
   const seller = await prisma.seller.findUnique({
     where: { userId },
   });
-  console.log("Seller: ", seller);
   if (!seller) {
     throw new Error("User not found");
   }

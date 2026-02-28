@@ -9,7 +9,6 @@ const createReviews = async (
   const customer = await prisma.customer.findUnique({
     where: { userId },
   });
-  console.log({ data, userId, medicineId, customer });
   const result = await prisma.reviews.create({
     data: {
       ...data,
