@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/server.mjs": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
