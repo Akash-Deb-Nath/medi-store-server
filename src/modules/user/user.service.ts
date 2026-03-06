@@ -5,21 +5,21 @@ const createCustomer = async (
   data: Omit<Customer, "id" | "createdAt">,
   userId: string,
 ) => {
-  const result = await prisma.$transaction(async (tx) => {
-    const customer = await tx.customer.create({
-      data: {
-        ...data,
-        userId,
-      },
-    });
-
-    await tx.user.update({
-      where: { id: userId },
-      data: { role: "CUSTOMER" },
-    });
-
-    return customer;
+  // const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.customer.create({
+    data: {
+      ...data,
+      userId,
+    },
   });
+
+  //   // await tx.user.update({
+  //   //   where: { id: userId },
+  //   //   data: { role: "CUSTOMER" },
+  //   // });
+
+  //   return customer;
+  // });
 
   return result;
 };
@@ -28,23 +28,19 @@ const createSeller = async (
   data: Omit<Seller, "id" | "createdAt">,
   userId: string,
 ) => {
-  const result = await prisma.$transaction(async (tx) => {
-    const seller = await tx.seller.create({
-      data: {
-        ...data,
-        userId,
-      },
-    });
-
-    await tx.user.update({
-      where: { id: userId },
-      data: { role: "SELLER" },
-    });
-
-    return seller;
+  const seller = await prisma.seller.create({
+    data: {
+      ...data,
+      userId,
+    },
   });
 
-  return result;
+  await prisma.user.update({
+    where: { id: userId },
+    data: { role: "SELLER" },
+  });
+
+  return seller;
 };
 
 const getAllUsers = async () => {

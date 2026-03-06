@@ -11,6 +11,10 @@ export const auth = betterAuth({
       enabled: true,
       maxAge: 5 * 60, // 5 minutes
     },
+    cookieOptions: {
+      sameSite: "none", // cross-domain
+      secure: true, // only HTTPS
+    },
   },
   advanced: {
     cookiePrefix: "better-auth",
@@ -20,6 +24,7 @@ export const auth = betterAuth({
     },
     disableCSRFCheck: true, // Allow requests without Origin header (Postman, mobile apps, etc.)
   },
+  baseURL: process.env.API_URL,
   trustedOrigins: [process.env.APP_URL!],
   user: {
     additionalFields: {
