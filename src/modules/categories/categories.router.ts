@@ -11,4 +11,16 @@ router.post(
 );
 router.get("/", CategoriesController.getCategories);
 
+router.put(
+  "/:id",
+  authMiddleware(UserRole.ADMIN),
+  CategoriesController.updateCategory,
+);
+
+router.delete(
+  "/:id",
+  authMiddleware(UserRole.ADMIN),
+  CategoriesController.deleteCategory,
+);
+
 export const categoriesRouter: Router = router;

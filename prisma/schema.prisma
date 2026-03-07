@@ -21,9 +21,9 @@ model Medicines {
   stockQuantity Int
   imageUrl      String?
   sellerId      String
-  seller        Seller     @relation(fields: [sellerId], references: [id])
+  seller        Seller     @relation(fields: [sellerId], references: [id],onDelete: Cascade)
   categoryId    String
-  category      Categories @relation(fields: [categoryId], references: [id])
+  category      Categories @relation(fields: [categoryId], references: [id],onDelete: Cascade)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
@@ -46,7 +46,7 @@ model Categories {
 model Cart {
   id              String   @id @default(uuid())
   customerId      String   @unique
-  customer        Customer @relation(fields: [customerId], references: [id])
+  customer        Customer @relation(fields: [customerId], references: [id],onDelete: Cascade)
   shippingAddress String
   totalPrice      Int
   createdAt       DateTime @default(now())
@@ -58,9 +58,9 @@ model Cart {
 model CartItem {
   id         String    @id @default(uuid())
   cartId     String
-  cart       Cart      @relation(fields: [cartId], references: [id])
+  cart       Cart      @relation(fields: [cartId], references: [id],onDelete: Cascade)
   medicineId String
-  medicine   Medicines @relation(fields: [medicineId], references: [id])
+  medicine   Medicines @relation(fields: [medicineId], references: [id],onDelete: Cascade)
   quantity   Int
   price      Int
 
@@ -70,7 +70,7 @@ model CartItem {
 model Orders {
   id         String      @id @default(uuid())
   customerId String
-  customer   Customer    @relation(fields: [customerId], references: [id])
+  customer   Customer    @relation(fields: [customerId], references: [id],onDelete: Cascade)
   totalPrice Int
   status     OrderStatus
   orderedAt  DateTime    @default(now())
@@ -84,9 +84,9 @@ model Orders {
 model OrderItem {
   id         String    @id @default(uuid())
   orderId    String
-  order      Orders    @relation(fields: [orderId], references: [id])
+  order      Orders    @relation(fields: [orderId], references: [id],onDelete: Cascade)
   medicineId String
-  medicine   Medicines @relation(fields: [medicineId], references: [id])
+  medicine   Medicines @relation(fields: [medicineId], references: [id],onDelete: Cascade)
   quantity   Int
   price      Int
 
@@ -98,9 +98,9 @@ model Reviews {
   rating     Int
   comment    String?   @db.Text
   customerId String
-  customer   Customer  @relation(fields: [customerId], references: [id])
+  customer   Customer  @relation(fields: [customerId], references: [id],onDelete: Cascade)
   medicineId String
-  medicine   Medicines @relation(fields: [medicineId], references: [id])
+  medicine   Medicines @relation(fields: [medicineId], references: [id],onDelete: Cascade)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
