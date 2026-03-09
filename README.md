@@ -6,6 +6,8 @@
 
 Backend API for an **Online OTC (Over-The-Counter) Medicine Marketplace**.
 
+Live Link: https://medi-store-server-delta.vercel.app/
+
 This platform allows:
 
 - 🧑 Customers to browse and purchase medicines
