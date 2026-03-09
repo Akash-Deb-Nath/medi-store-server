@@ -15,6 +15,15 @@ const createReviews = async (
       medicineId,
       customerId: customer?.id as string,
     },
+    include: {
+      customer: {
+        include: {
+          user: {
+            select: { name: true, image: true },
+          },
+        },
+      },
+    },
   });
   return result;
 };
@@ -33,6 +42,7 @@ const getReviews = async (medicineId: string) => {
     },
     orderBy: { createdAt: "desc" },
   });
+  console.log(result);
   return result;
 };
 
