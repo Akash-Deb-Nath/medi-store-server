@@ -19,7 +19,7 @@ This platform allows:
 
 # 🚀 Features
 
-- 🔐 JWT Authentication
+- 🔐 Better Auth Authentication
 - 💊 Public Medicine Browsing with Filters
 - 🛒 Order Management System
 - 🏪 Seller Inventory Management
