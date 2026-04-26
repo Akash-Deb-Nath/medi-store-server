@@ -21,7 +21,7 @@ router.get(
 );
 router.get(
   "/:orderId",
-  authMiddleware(UserRole.CUSTOMER),
+  authMiddleware(UserRole.ADMIN, UserRole.SELLER, UserRole.CUSTOMER),
   ordersController.getOrderDetails,
 );
 router.put(

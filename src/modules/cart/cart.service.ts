@@ -1,4 +1,4 @@
-import { CartItem } from "../../../generated/prisma/client";
+import { CartItem } from "../../../prisma/generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const addToCart = async (

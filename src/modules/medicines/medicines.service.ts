@@ -1,5 +1,5 @@
-import { Medicines } from "../../../generated/prisma/client";
-import { MedicinesWhereInput } from "../../../generated/prisma/models";
+import { Medicines } from "../../../prisma/generated/prisma/client";
+import { MedicinesWhereInput } from "../../../prisma/generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
 const postMedicines = async (

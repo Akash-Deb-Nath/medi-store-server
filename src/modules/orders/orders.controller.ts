@@ -82,14 +82,15 @@ const getOrders = async (req: Request, res: Response) => {
 
 const getOrderDetails = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const user = req.user;
     const { orderId } = req.params;
-    if (!userId) {
+    if (!user?.id) {
       throw new Error("Unauthorized");
     }
     const result = await orderService.getOrderDetails(
       orderId as string,
-      userId,
+      user.id,
+      user.role as UserRole,
     );
     res.status(200).json(result);
   } catch (error) {

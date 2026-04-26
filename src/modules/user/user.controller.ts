@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserRole } from "../../middlewares/authMiddleware";
 import { UserServices } from "./user.service";
+import paginationSortingHelper from "../../helpers/paginationSortingHelper";
 
 const createCustomerOrSeller = async (req: Request, res: Response) => {
   try {
@@ -51,7 +52,17 @@ const createCustomerOrSeller = async (req: Request, res: Response) => {
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const result = await UserServices.getAllUsers();
+    const { page, limit, skip, sortBy, sortOrder } = paginationSortingHelper(
+      req.query,
+    );
+
+    const result = await UserServices.getAllUsers({
+      page,
+      limit,
+      skip,
+      sortBy,
+      sortOrder,
+    });
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({

@@ -1,4 +1,4 @@
-import { Customer, Seller } from "../../../generated/prisma/client";
+import { Customer, Seller } from "../../../prisma/generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const createCustomer = async (
@@ -43,15 +43,43 @@ const createSeller = async (
   return seller;
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async ({
+  page,
+  limit,
+  skip,
+  sortBy,
+  sortOrder,
+}: {
+  page: number;
+  limit: number;
+  skip: number;
+  sortBy: string;
+  sortOrder: string;
+}) => {
   const users = await prisma.user.findMany({
+    take: limit,
+    skip,
     include: {
       customer: true,
       seller: true,
     },
-    orderBy: { createdAt: "desc" },
+    orderBy:
+      sortBy && sortOrder
+        ? {
+            [sortBy]: sortOrder,
+          }
+        : { createdAt: "desc" },
   });
-  return users;
+  const total = await prisma.user.count();
+  return {
+    data: users,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };
 
 const getUserById = async (userId: string) => {

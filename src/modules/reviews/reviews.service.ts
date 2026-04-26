@@ -1,4 +1,4 @@
-import { Reviews } from "../../../generated/prisma/client";
+import { Reviews } from "../../../prisma/generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const createReviews = async (
