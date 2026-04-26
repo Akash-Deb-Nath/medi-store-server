@@ -1,0 +1,11 @@
+enum OrderStatus {
+    PENDING
+    SHIPPED
+    DELIVERED
+    CANCELED
+}
+
+enum PaymentStatus {
+    PAID
+    UNPAID
+}

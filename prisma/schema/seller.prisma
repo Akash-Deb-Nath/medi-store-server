@@ -1,0 +1,15 @@
+model Seller {
+    id            String    @id @default(uuid())
+    userId        String    @unique
+    user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    pharmacyName  String
+    licenseNumber String
+    role          String
+    phoneNumber   String?
+    dateOfBirth   DateTime?
+    gender        String?
+    address       String?
+    createdAt     DateTime  @default(now())
+
+    medicines Medicines[]
+}

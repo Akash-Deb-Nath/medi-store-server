@@ -7,12 +7,22 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "seed:admin": "tsx src/scripts/seedAdmin.ts",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "studio": "prisma studio",
+    "push": "prisma db push",
+    "pull": "prisma db pull",
+    "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
     "build": "prisma generate && tsup src/server.ts --format esm --platform node --target node20 --outDir api --clean --external pg-native --external @prisma/client --external .prisma/client",
     "postinstall": "prisma generate",
     "vercel-build": "prisma generate && pnpm run build",
     "start": "node api/server.js"
   },
-  "keywords": ["express", "api", "medistore"],
+  "keywords": [
+    "express",
+    "api",
+    "medistore"
+  ],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.28.0",
@@ -38,6 +48,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "pg": "^8.17.2"
+    "pg": "^8.17.2",
+    "stripe": "^22.1.0"
   }
 }

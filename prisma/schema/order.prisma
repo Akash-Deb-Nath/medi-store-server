@@ -1,0 +1,28 @@
+model Orders {
+    id              String        @id @default(uuid())
+    customerId      String
+    customer        Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+    totalPrice      Int
+    status          OrderStatus
+    paymentStatus   PaymentStatus @default(UNPAID)
+    ShippingAddress String        @default("")
+    orderedAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+
+    items   OrderItem[]
+    payment Payment?
+
+    @@index([customerId])
+}
+
+model OrderItem {
+    id         String    @id @default(uuid())
+    orderId    String
+    order      Orders    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    medicineId String
+    medicine   Medicines @relation(fields: [medicineId], references: [id], onDelete: Cascade)
+    quantity   Int
+    price      Int
+
+    @@index([orderId, medicineId])
+}

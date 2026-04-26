@@ -1,0 +1,13 @@
+model Reviews {
+    id         String    @id @default(uuid())
+    rating     Int
+    comment    String?   @db.Text
+    customerId String
+    customer   Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+    medicineId String
+    medicine   Medicines @relation(fields: [medicineId], references: [id], onDelete: Cascade)
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+
+    @@index([customerId, medicineId])
+}

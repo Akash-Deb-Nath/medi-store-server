@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, Request, Response } from "express";
 import { medicinesRouter } from "./modules/medicines/medicines.router";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
@@ -22,6 +22,15 @@ const allowedOrigins = [
   process.env.APP_URL || "http://localhost:3000",
   process.env.PROD_APP_URL, // Production frontend URL
 ].filter(Boolean); // Remove undefined values
+
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  async (req: Request, res: Response) => {
+    console.log("Webhook received: ", req.body);
+    res.status(200).json({ received: true });
+  },
+);
 
 app.use(
   cors({
