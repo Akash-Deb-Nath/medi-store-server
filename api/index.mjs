@@ -16,8 +16,8 @@ import { fileURLToPath } from "url";
 import * as runtime from "@prisma/client/runtime/client";
 var config = {
   "previewFeatures": [],
-  "clientVersion": "7.4.2",
-  "engineVersion": "94a226be1cf2967af2541cca5529f0f7ba866919",
+  "clientVersion": "7.8.0",
+  "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
   "activeProvider": "postgresql",
   "inlineSchema": 'model User {\n  id            String    @id\n  name          String\n  email         String\n  emailVerified Boolean   @default(false)\n  image         String?\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  sessions      Session[]\n  accounts      Account[]\n  seller        Seller?\n  customer      Customer?\n\n  role   String? @default("CUSTOMER")\n  status String? @default("active")\n\n  @@unique([email])\n  @@map("user")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@index([userId])\n  @@map("session")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@index([userId])\n  @@map("account")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map("verification")\n}\n\nmodel Cart {\n  id              String   @id @default(uuid())\n  customerId      String   @unique\n  customer        Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)\n  shippingAddress String\n  totalPrice      Int\n  createdAt       DateTime @default(now())\n  updatedAt       DateTime @updatedAt\n\n  items CartItem[]\n}\n\nmodel CartItem {\n  id         String    @id @default(uuid())\n  cartId     String\n  cart       Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)\n  medicineId String\n  medicine   Medicines @relation(fields: [medicineId], references: [id], onDelete: Cascade)\n  quantity   Int\n  price      Int\n\n  @@unique([cartId, medicineId])\n}\n\nmodel Categories {\n  id        String      @id @default(uuid())\n  name      String      @unique @db.VarChar(255)\n  details   String?     @db.Text\n  createdAt DateTime    @default(now())\n  updatedAt DateTime    @updatedAt\n  medicines Medicines[]\n}\n\nmodel Customer {\n  id          String    @id @default(uuid())\n  userId      String    @unique\n  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  role        String\n  phoneNumber String?\n  dateOfBirth DateTime?\n  gender      String?\n  address     String?\n  createdAt   DateTime  @default(now())\n\n  orders  Orders[]\n  reviews Reviews[]\n  carts   Cart[]\n}\n\nenum OrderStatus {\n  PENDING\n  PROCESSING\n  SHIPPED\n  DELIVERED\n  CANCELED\n}\n\nenum PaymentStatus {\n  PAID\n  UNPAID\n}\n\nmodel Medicines {\n  id            String     @id @default(uuid())\n  name          String     @db.VarChar(255)\n  manufacturer  String\n  price         Int\n  stockQuantity Int\n  imageUrl      String?\n  sellerId      String\n  seller        Seller     @relation(fields: [sellerId], references: [id], onDelete: Cascade)\n  categoryId    String\n  category      Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)\n  createdAt     DateTime   @default(now())\n  updatedAt     DateTime   @updatedAt\n\n  orderItems OrderItem[]\n  reviews    Reviews[]\n  cartItems  CartItem[]\n\n  @@index([sellerId, categoryId])\n}\n\nmodel Orders {\n  id              String        @id @default(uuid())\n  customerId      String\n  customer        Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)\n  totalPrice      Int\n  status          OrderStatus\n  paymentStatus   PaymentStatus @default(UNPAID)\n  ShippingAddress String        @default("")\n  orderedAt       DateTime      @default(now())\n  updatedAt       DateTime      @updatedAt\n\n  items   OrderItem[]\n  payment Payment?\n\n  @@index([customerId])\n}\n\nmodel OrderItem {\n  id         String    @id @default(uuid())\n  orderId    String\n  order      Orders    @relation(fields: [orderId], references: [id], onDelete: Cascade)\n  medicineId String\n  medicine   Medicines @relation(fields: [medicineId], references: [id], onDelete: Cascade)\n  quantity   Int\n  price      Int\n\n  @@index([orderId, medicineId])\n}\n\nmodel Payment {\n  id                 String        @id @default(uuid(7))\n  amount             Float\n  transactionId      String        @unique @db.Uuid()\n  stripeEventId      String?       @unique\n  status             PaymentStatus @default(UNPAID)\n  paymentGatewayData Json?\n  createdAt          DateTime      @default(now())\n  updatedAt          DateTime      @updatedAt\n\n  orderId String @unique\n  orders  Orders @relation(fields: [orderId], references: [id], onDelete: Cascade)\n\n  @@index([orderId])\n  @@index([transactionId])\n  @@map("payments")\n}\n\nmodel Reviews {\n  id         String    @id @default(uuid())\n  rating     Int\n  comment    String?   @db.Text\n  customerId String\n  customer   Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)\n  medicineId String\n  medicine   Medicines @relation(fields: [medicineId], references: [id], onDelete: Cascade)\n  createdAt  DateTime  @default(now())\n  updatedAt  DateTime  @updatedAt\n\n  @@index([customerId, medicineId])\n}\n\n// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = "prisma-client"\n  output   = "../generated/prisma"\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n\nmodel Seller {\n  id            String    @id @default(uuid())\n  userId        String    @unique\n  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  pharmacyName  String\n  licenseNumber String\n  role          String\n  phoneNumber   String?\n  dateOfBirth   DateTime?\n  gender        String?\n  address       String?\n  createdAt     DateTime  @default(now())\n\n  medicines Medicines[]\n}\n',
   "runtimeDataModel": {
@@ -1012,7 +1012,7 @@ var checkout = async (userId) => {
       orderId: order.id,
       paymentId: paymentData.id
     },
-    success_url: `${envVars.FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}&amount=XXX&transactionId=YYY`,
+    success_url: `${envVars.FRONTEND_URL}/payment-success`,
     cancel_url: `${envVars.FRONTEND_URL}/orders`
   });
   return {
@@ -1550,24 +1550,6 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 var app_default = app;
-
-// src/server.ts
-var PORT = process.env.PORT || 5e3;
-async function main() {
-  try {
-    await prisma.$connect();
-    app_default.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
-    });
-    console.log("Connected to the database successfully");
-  } catch (error) {
-    console.error("An error occured: ", error);
-    await prisma.$disconnect();
-    process.exit(1);
-  }
-}
-main();
-var server_default = app_default;
 export {
-  server_default as default
+  app_default as default
 };

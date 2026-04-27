@@ -143,7 +143,7 @@ const checkout = async (userId: string) => {
       orderId: order.id,
       paymentId: paymentData.id,
     },
-    success_url: `${envVars.FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}&amount=XXX&transactionId=YYY`,
+    success_url: `${envVars.FRONTEND_URL}/payment-success`,
     cancel_url: `${envVars.FRONTEND_URL}/orders`,
   });
 

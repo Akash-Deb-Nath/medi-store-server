@@ -13,9 +13,8 @@
     "push": "prisma db push",
     "pull": "prisma db pull",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
-    "build": "prisma generate && tsup src/server.ts --format esm --platform node --target node20 --outDir api --clean --external pg-native --external @prisma/client --external .prisma/client",
-    "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && pnpm run build",
+    "build:vercel": "prisma generate && tsup --config tsup.config.ts",
+    "postinstall": "prisma generate && pnpm run build:vercel",
     "start": "node api/server.js"
   },
   "keywords": [
@@ -34,7 +33,7 @@
     "@types/express": "^5.0.6",
     "@types/node": "^25.1.0",
     "@types/pg": "^8.16.0",
-    "prisma": "7.4.2",
+    "prisma": "7.8.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
@@ -42,7 +41,7 @@
   "dependencies": {
     "@better-auth/prisma-adapter": "^1.5.3",
     "@prisma/adapter-pg": "^7.3.0",
-    "@prisma/client": "7.4.2",
+    "@prisma/client": "7.8.0",
     "@types/cors": "^2.8.19",
     "better-auth": "^1.4.18",
     "cors": "^2.8.6",
