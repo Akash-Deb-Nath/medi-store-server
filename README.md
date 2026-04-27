@@ -14,17 +14,68 @@ This platform allows:
 - 🏪 Sellers to manage inventory and orders
 - 🛡 Admins to manage users
 
+---
+
+# 💊 MediStore – OTC Medicine Marketplace
+
+A full-stack e-commerce platform for Over-The-Counter (OTC) medicines with secure payment integration, role-based access control, and production-ready backend architecture.
 
 ---
 
-# 🚀 Features
+## 🚀 Live Demo
 
-- 🔐 Better Auth Authentication
-- 💊 Public Medicine Browsing with Filters
-- 🛒 Order Management System
-- 🏪 Seller Inventory Management
-- 🛡 Admin User Control
-- 📦 Structured Order Lifecycle
+🔗 https://your-live-link.com
+
+---
+
+## 🧑‍💻 Tech Stack
+
+- **Backend:** Node.js, Express.js
+- **Database:** PostgreSQL + Prisma ORM
+- **Authentication:** Better Auth (Role-Based Access Control)
+- **Payments:** Stripe (Webhook-based verification)
+- **Deployment:** Vercel
+
+---
+
+## ✨ Key Features
+
+### 🔐 Secure Authentication & Authorization
+
+- Better Auth Authentication
+- Role-based access (Admin / Seller / Customer)
+
+### 🛒 E-commerce Flow
+
+- Add to cart
+- Checkout system
+- Order placement
+
+### 💳 Stripe Payment Integration
+
+- Secure checkout session
+- Webhook-based payment confirmation
+- Prevents fake/success URL manipulation
+
+### 📦 Order Management
+
+- User order history
+- Admin order control
+
+### ⚡ Optimized Backend
+
+- Modular architecture
+- Prisma ORM for scalable DB queries
+- Pagination & filtering support
+
+---
+
+## 🧠 Project Highlights
+
+- ✅ Implemented **Stripe Webhooks** to ensure real payment verification
+- ✅ Designed a **scalable backend structure** (modular services & controllers)
+- ✅ Built a **production-ready REST API** with proper error handling
+- ✅ Handled **concurrent API requests & optimized response flow**
 
 ---
 
@@ -92,6 +143,8 @@ Add to Cart
    ↓
 Checkout
    ↓
+Pay
+   ↓
 Track Order
 ```
 
@@ -116,15 +169,22 @@ Update Status
 # 📊 Order Status Lifecycle
 
 ```text
-PLACED
-  │
-  ├── Customer Cancels → CANCELLED
-  │
-  └── Seller Confirms → PROCESSING
-                          ↓
-                       SHIPPED
-                          ↓
-                       DELIVERED
+[ ORDER CREATED ]
+        │
+ ( PENDING_PAYMENT ) ────────────────┐
+        │                            │
+   [ STRIPE CHECKOUT ]              │
+        │                            │
+ ( Payment Success )         ( Payment Failed / Expired )
+        │                            │
+        ↓                            ↓
+     [ PLACED ]            [ CANCELLED / FAILED ]
+        │
+   [ PROCESSING ]
+        │
+    [ SHIPPED ]
+        │
+   [ DELIVERED ]
 ```
 
 ### Status Definitions
@@ -169,6 +229,15 @@ PLACED
 
 ---
 
-# 📌 Future Improvements
+## 🔄 Payment Flow
 
-- 💳 Payment Gatew
+1. User clicks **Checkout**
+2. Stripe session is created
+3. User completes payment
+4. Stripe Webhook triggers backend
+5. Order is marked as **paid (verified)**
+6. Data stored securely in DB
+
+👉 Ensures **no fake payment success**
+
+---
